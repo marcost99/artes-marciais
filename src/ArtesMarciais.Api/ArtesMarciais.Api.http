@@ -1,0 +1,6 @@
+@ArtesMarciais.Api_HostAddress = http://localhost:5187
+
+GET {{ArtesMarciais.Api_HostAddress}}/lutador/
+Accept: application/json
+
+###
