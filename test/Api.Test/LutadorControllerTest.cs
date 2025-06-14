@@ -1,5 +1,6 @@
 using Api.Test.Order;
-using ArtesMarciais.Core.DTO;
+using ArtesMarciais.Core.DTO.Listar;
+using ArtesMarciais.Core.DTO.Registrar;
 using ArtesMarciais.Core.Enum;
 using FluentAssertions;
 using System.Net;
@@ -24,7 +25,16 @@ namespace Api.Test
         public async Task RegistrarComSucesso()
         {
             // Arrange
-            var request = new LutadorRegistrarDTO() { Nome = "Amanda Nunes", DataNascimento = new DateOnly(1988, 5, 30), Sexo = SexoEnum.Feminino, Altura = (decimal)1.73, Peso = (decimal)61.00 };
+            var request = new LutadorRegistrarDTO() 
+            { 
+                Nome = "Amanda Nunes", Cpf = "11122233344", DataNascimento = new DateOnly(1988, 5, 30), Sexo = SexoEnum.Feminino, Altura = (decimal)1.73, Peso = (decimal)61.00,
+                PreparacaoLuta = new PreparacaoLutaRegistrarDTO
+                { 
+                    Descricao = "Ganhar",
+                    PesoLimiteInicial = (decimal)65.80,
+                    PesoLimiteFinal = (decimal)70.30
+                }
+            };
 
             // Act
             var result = await _httpClient.PostAsJsonAsync(METHOD, request);
@@ -43,7 +53,7 @@ namespace Api.Test
         public async Task ListarComSucesso()
         {
             // Arrange e Act
-            var result = await _httpClient.GetFromJsonAsync<IEnumerable<LutadorDTO>>(METHOD);
+            var result = await _httpClient.GetFromJsonAsync<IEnumerable<LutadorListarDTO>>(METHOD);
 
             // Assert
             result.Should().NotBeEmpty();

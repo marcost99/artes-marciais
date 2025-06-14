@@ -1,4 +1,5 @@
-﻿using ArtesMarciais.Core.DTO;
+﻿using ArtesMarciais.Core.DTO.Listar;
+using ArtesMarciais.Core.DTO.Registrar;
 using ArtesMarciais.Core.Entities;
 using AutoMapper;
 
@@ -13,13 +14,16 @@ namespace ArtesMarciais.Domain.Mapper
         }
         private void EntityToDTO()
         {
-            CreateMap<LutadorDTO, Lutador>()
+            CreateMap<Lutador, LutadorListarDTO>()
+                .ReverseMap();
+            CreateMap<PreparacaoLuta, PreparacaoLutaListarDTO>()
                 .ReverseMap();
         }
 
         private void DtoToEntity()
         {
             CreateMap<LutadorRegistrarDTO, Lutador>();
+            CreateMap<PreparacaoLutaRegistrarDTO, PreparacaoLuta>();
         }
     }
 }

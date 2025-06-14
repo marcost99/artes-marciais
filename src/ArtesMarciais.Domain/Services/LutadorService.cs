@@ -1,4 +1,5 @@
-﻿using ArtesMarciais.Core.DTO;
+﻿using ArtesMarciais.Core.DTO.Listar;
+using ArtesMarciais.Core.DTO.Registrar;
 using ArtesMarciais.Core.Entities;
 using ArtesMarciais.Domain.Services.Interfaces;
 using ArtesMarciais.Infra.Repositories.Interfaces;
@@ -17,22 +18,47 @@ namespace ArtesMarciais.Domain.Services
             _lutadorRepository = lutadorRepository;
         }
 
-        public async Task<LutadorDTO> Registrar(LutadorRegistrarDTO request)
+        public async Task<LutadorListarDTO> Registrar(LutadorRegistrarDTO request)
         {
-            var entidade = _mapper.Map<Lutador>(request);
+            var entidade = await _lutadorRepository.BuscarPorCpf(request.Cpf);
 
-            await _lutadorRepository.Registrar(entidade);
+            if (entidade == null)
+            {
+                entidade = _mapper.Map<Lutador>(request);
 
-            var dto = _mapper.Map<LutadorDTO>(entidade);
+                var entidadePreparacaoLutaInicial = _mapper.Map<PreparacaoLuta>(request.PreparacaoLuta);
+
+                entidade.PreparacaoLutaInicial = entidadePreparacaoLutaInicial;
+
+                await _lutadorRepository.Registrar(entidade);
+            }
+            else
+            {
+                var entidadePreparacaoLutaFinal = _mapper.Map<PreparacaoLuta>(request.PreparacaoLuta);
+                entidadePreparacaoLutaFinal.Id = entidade.PreparacaoLutaFinal.Id;
+
+                // fazer isso de uma outra
+                entidade.Nome = request.Nome;
+                entidade.DataNascimento = request.DataNascimento;
+                entidade.Sexo = request.Sexo;
+                entidade.Altura = request.Altura;
+                entidade.Peso = request.Peso;
+
+                entidade.PreparacaoLutaFinal = entidadePreparacaoLutaFinal;
+
+                await _lutadorRepository.Atualizar(entidade);
+            }
+
+            var dto = _mapper.Map<LutadorListarDTO>(entidade);
 
             return dto;
         }
 
-        public async Task<IEnumerable<LutadorDTO>?> Listar()
+        public async Task<IEnumerable<LutadorListarDTO>?> Listar()
         {
             var entidades = await _lutadorRepository.Listar();
 
-            var dto = _mapper.Map<IEnumerable<LutadorDTO>?>(entidades);
+            var dto = _mapper.Map<IEnumerable<LutadorListarDTO>?>(entidades);
 
             return dto;
         }

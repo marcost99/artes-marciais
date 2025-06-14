@@ -1,4 +1,5 @@
-using ArtesMarciais.Core.DTO;
+using ArtesMarciais.Core.DTO.Listar;
+using ArtesMarciais.Core.DTO.Registrar;
 using ArtesMarciais.Domain.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,7 +28,7 @@ public class LutadorController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<LutadorDTO>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<LutadorListarDTO>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Listar()
     {

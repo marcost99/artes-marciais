@@ -6,5 +6,7 @@ namespace ArtesMarciais.Infra.Repositories.Interfaces
     {
         Task Registrar(Lutador lutador);
         Task<IEnumerable<Lutador>?> Listar();
+        Task Atualizar(Lutador lutador);
+        Task<Lutador?> BuscarPorCpf(string cpf);
     }
 }

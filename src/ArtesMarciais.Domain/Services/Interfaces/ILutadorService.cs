@@ -1,10 +1,11 @@
-﻿using ArtesMarciais.Core.DTO;
+﻿using ArtesMarciais.Core.DTO.Listar;
+using ArtesMarciais.Core.DTO.Registrar;
 
 namespace ArtesMarciais.Domain.Services.Interfaces
 {
     public interface ILutadorService
     {
-        Task<LutadorDTO> Registrar(LutadorRegistrarDTO request);
-        Task<IEnumerable<LutadorDTO>?> Listar();
+        Task<LutadorListarDTO> Registrar(LutadorRegistrarDTO request);
+        Task<IEnumerable<LutadorListarDTO>?> Listar();
     }
 }
