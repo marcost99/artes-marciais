@@ -4,9 +4,10 @@ namespace ArtesMarciais.Infra.Repositories.Interfaces
 {
     public interface ILutadorRepository
     {
-        Task Registrar(Lutador lutador);
+        Task Adicionar(Lutador lutador);
         Task<IEnumerable<Lutador>?> Listar();
-        Task Atualizar(Lutador lutador);
-        Task<Lutador?> BuscarPorCpf(string cpf);
+        void Atualizar(Lutador lutador);
+        Task<Lutador?> ListarPorCpf(string cpf);
+        Task SaveChangesAsync();
     }
 }

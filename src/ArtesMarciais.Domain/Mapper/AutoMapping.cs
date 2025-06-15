@@ -22,7 +22,8 @@ namespace ArtesMarciais.Domain.Mapper
 
         private void DtoToEntity()
         {
-            CreateMap<LutadorRegistrarDTO, Lutador>();
+            CreateMap<LutadorRegistrarDTO, Lutador>()
+                .ForMember(dest => dest.PreparacaoLutaInicial, opt => opt.MapFrom(src => src.PreparacaoLuta));
             CreateMap<PreparacaoLutaRegistrarDTO, PreparacaoLuta>();
         }
     }

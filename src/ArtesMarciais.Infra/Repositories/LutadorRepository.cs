@@ -13,34 +13,22 @@ namespace ArtesMarciais.Infra.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task Registrar(Lutador lutador)
+        public async Task Adicionar(Lutador lutador)
         {
-            await _dbContext.PreparacaoLuta.AddAsync(lutador.PreparacaoLutaInicial);
-
-            await _dbContext.SaveChangesAsync();
-
-            lutador.PreparacaoLutaFinal = lutador.PreparacaoLutaInicial;
-
             await _dbContext.Lutador.AddAsync(lutador);
-
-            await _dbContext.SaveChangesAsync();
         }
 
-        public async Task Atualizar(Lutador lutador)
+        public void Atualizar(Lutador lutador)
         {
-            if (lutador.IdPreparacaoLutaInicial == lutador.IdPreparacaoLutaFinal)
-            {
-                await _dbContext.PreparacaoLuta.AddAsync(lutador.PreparacaoLutaFinal);
-
-                await _dbContext.SaveChangesAsync();
-            }
-
             _dbContext.Lutador.Update(lutador);
+        }
 
+        public async Task SaveChangesAsync()
+        {
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<Lutador?> BuscarPorCpf(string cpf)
+        public async Task<Lutador?> ListarPorCpf(string cpf)
         {
             var entidade = await _dbContext.Lutador
                                     .AsNoTracking()
@@ -53,7 +41,11 @@ namespace ArtesMarciais.Infra.Repositories
 
         public async Task<IEnumerable<Lutador>?> Listar()
         {
-            var entidades = await _dbContext.Lutador.AsNoTracking().ToListAsync();
+            var entidades = await _dbContext.Lutador
+                                    .AsNoTracking()
+                                    .Include(lu => lu.PreparacaoLutaInicial)
+                                    .Include(lu => lu.PreparacaoLutaFinal)
+                                    .ToListAsync();
 
             return entidades;
         }
