@@ -21,5 +21,7 @@ namespace ArtesMarciais.Core.Entities
         [NeverReplaced]
         public virtual PreparacaoLuta PreparacaoLutaInicial { get; set; } = null!;
         public virtual PreparacaoLuta PreparacaoLutaFinal { get; set; } = null!;
+
+        public virtual IEnumerable<LutadorCampeonato> LutadorCampeonato { get; set; } = null!;
     }
 }

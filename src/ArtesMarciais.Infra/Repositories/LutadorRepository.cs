@@ -23,6 +23,11 @@ namespace ArtesMarciais.Infra.Repositories
             _dbContext.Lutador.Update(lutador);
         }
 
+        public void RemoveRange(IEnumerable<LutadorCampeonato> lutadorCampeonato)
+        {
+            _dbContext.LutadorCampeonato.RemoveRange(lutadorCampeonato);
+        }
+
         public async Task SaveChangesAsync()
         {
             await _dbContext.SaveChangesAsync();
@@ -34,6 +39,8 @@ namespace ArtesMarciais.Infra.Repositories
                                     .AsNoTracking()
                                     .Include(lu => lu.PreparacaoLutaInicial)
                                     .Include(lu => lu.PreparacaoLutaFinal)
+                                    .Include(lu => lu.LutadorCampeonato)
+                                        .ThenInclude(lc => lc.Campeonato)
                                     .FirstOrDefaultAsync(lu => lu.Cpf == cpf);
 
             return entidade;

@@ -29,6 +29,18 @@ namespace ArtesMarciais.Domain.Services
                 // atribui o objeto preparacao luta inicial para o final para que ambos tenham os mesmos valores e identificador no registro. Obs.: se no Automapper configurar o mapeamento automatico para PreparacaoLutaFinal, mesmo este tendo os mesmos dados do objeto PreparacaoLutaInicial, os objetos serao diferentes e com isso será gerado um novo registro de PreparacaoLuta
                 entidade.PreparacaoLutaFinal = entidade.PreparacaoLutaInicial;
 
+                // remove todas as associacoes anteriores do lutador
+                _lutadorRepository.RemoveRange(entidade.LutadorCampeonato);
+
+                var campeonato1 = new Campeonato { Nome = "Campeonato Mundial", Localidade = "Pequim, China", DataRealizacao = DateTime.Now };
+                var campeonato2 = new Campeonato { Nome = "Open Fight", Localidade = "Rio de Janeiro, Brasil", DataRealizacao = DateTime.Now };
+
+                entidade.LutadorCampeonato = new List<LutadorCampeonato>
+                {
+                    new LutadorCampeonato { Lutador = entidade, Campeonato = campeonato1 },
+                    new LutadorCampeonato { Lutador = entidade, Campeonato = campeonato2 }
+                };
+
                 await _lutadorRepository.Adicionar(entidade);
             }
             else
@@ -50,6 +62,16 @@ namespace ArtesMarciais.Domain.Services
 
                 // mapeia campos que devem ser atualizados da request para a entidade. Obs.: Nao foi utilizado o AutoMapper para nao utilizar a logica de mapeamento do registrar (esta que substitui campos que no atualizar nao devem ser substituidos)
                 Core.Helpers.Mapper.MapProperties(request, entidade);
+
+                // remove todas as associacoes anteriores do lutador
+                _lutadorRepository.RemoveRange(entidade.LutadorCampeonato);
+
+                var campeonato1 = new Campeonato { Id = 1, Nome = "Campeonato Mundial", Localidade = "Pequim, China", DataRealizacao = DateTime.Now };
+
+                entidade.LutadorCampeonato = new List<LutadorCampeonato>
+                {
+                    new LutadorCampeonato { Lutador = entidade, Campeonato = campeonato1 }
+                };
 
                 _lutadorRepository.Atualizar(entidade);
             }
