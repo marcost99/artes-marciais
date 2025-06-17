@@ -66,12 +66,15 @@ namespace ArtesMarciais.Domain.Services
                 // remove todas as associacoes anteriores do lutador
                 _lutadorRepository.RemoveRange(entidade.LutadorCampeonato);
 
-                var campeonato1 = new Campeonato { Id = 1, Nome = "Campeonato Mundial", Localidade = "Pequim, China", DataRealizacao = DateTime.Now };
-
-                entidade.LutadorCampeonato = new List<LutadorCampeonato>
+                var campeonato1 = new Campeonato { Nome = "Open Fight", Localidade = "Fortaleza, Brasil", DataRealizacao = DateTime.Now.AddDays(10) };
+                var campeonato2 = new Campeonato { Nome = "UFC 320", Localidade = "Montevideu, Uruguai", DataRealizacao = DateTime.Now.AddDays(100) };
+                var lutadorCampeonato = new List<LutadorCampeonato>
                 {
-                    new LutadorCampeonato { Lutador = entidade, Campeonato = campeonato1 }
+                    new LutadorCampeonato { Lutador = entidade, Campeonato = campeonato1 },
+                    new LutadorCampeonato { Lutador = entidade, Campeonato = campeonato2 }
                 };
+
+                entidade.LutadorCampeonato = await _lutadorRepository.AtualizaLutadorCampeonato(lutadorCampeonato);
 
                 _lutadorRepository.Atualizar(entidade);
             }

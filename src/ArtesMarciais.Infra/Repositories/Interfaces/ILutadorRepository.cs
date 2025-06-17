@@ -10,5 +10,6 @@ namespace ArtesMarciais.Infra.Repositories.Interfaces
         Task<Lutador?> ListarPorCpf(string cpf);
         Task SaveChangesAsync();
         void RemoveRange(IEnumerable<LutadorCampeonato> lutadorCampeonato);
+        Task<List<LutadorCampeonato>> AtualizaLutadorCampeonato(List<LutadorCampeonato> lutadorCampeonatos);
     }
 }

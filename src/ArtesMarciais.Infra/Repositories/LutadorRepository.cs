@@ -56,5 +56,29 @@ namespace ArtesMarciais.Infra.Repositories
 
             return entidades;
         }
+
+        public async Task<List<LutadorCampeonato>> AtualizaLutadorCampeonato(List<LutadorCampeonato> lutadorCampeonatos)
+        {
+            List<LutadorCampeonato> lutadorCampeonatoAtualizado = new();
+            foreach (var lutadorCampeonato in lutadorCampeonatos)
+            {
+                var campeonatoExistente = await _dbContext.Campeonato
+                    .FirstOrDefaultAsync(c => c.Nome == lutadorCampeonato.Campeonato.Nome);
+
+                if (campeonatoExistente != null)
+                {
+                    campeonatoExistente.Localidade = lutadorCampeonato.Campeonato.Localidade;
+                    campeonatoExistente.DataRealizacao = lutadorCampeonato.Campeonato.DataRealizacao;
+                    _dbContext.Entry(campeonatoExistente).State = EntityState.Modified;
+                    lutadorCampeonatoAtualizado.Add(new LutadorCampeonato { LutadorId = lutadorCampeonato.Lutador.Id, Lutador = lutadorCampeonato.Lutador, CampeonatoId = campeonatoExistente.Id, Campeonato = campeonatoExistente });
+                }
+                else
+                {
+                    await _dbContext.Campeonato.AddAsync(lutadorCampeonato.Campeonato);
+                    lutadorCampeonatoAtualizado.Add(new LutadorCampeonato { LutadorId = lutadorCampeonato.Lutador.Id, Lutador = lutadorCampeonato.Lutador, Campeonato = lutadorCampeonato.Campeonato });
+                }
+            }
+            return lutadorCampeonatoAtualizado;
+        }
     }
 }
