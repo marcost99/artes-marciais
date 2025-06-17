@@ -29,17 +29,15 @@ namespace ArtesMarciais.Domain.Services
                 // atribui o objeto preparacao luta inicial para o final para que ambos tenham os mesmos valores e identificador no registro. Obs.: se no Automapper configurar o mapeamento automatico para PreparacaoLutaFinal, mesmo este tendo os mesmos dados do objeto PreparacaoLutaInicial, os objetos serao diferentes e com isso será gerado um novo registro de PreparacaoLuta
                 entidade.PreparacaoLutaFinal = entidade.PreparacaoLutaInicial;
 
-                // remove todas as associacoes anteriores do lutador
-                _lutadorRepository.RemoveRange(entidade.LutadorCampeonato);
-
-                var campeonato1 = new Campeonato { Nome = "Campeonato Mundial", Localidade = "Pequim, China", DataRealizacao = DateTime.Now };
-                var campeonato2 = new Campeonato { Nome = "Open Fight", Localidade = "Rio de Janeiro, Brasil", DataRealizacao = DateTime.Now };
-
-                entidade.LutadorCampeonato = new List<LutadorCampeonato>
+                var campeonato1 = new Campeonato { Nome = "Open Fight", Localidade = "Lima, Peru", DataRealizacao = DateTime.Now.AddDays(10) };
+                var campeonato2 = new Campeonato { Nome = "UFC 320", Localidade = "Quito, Equador", DataRealizacao = DateTime.Now.AddDays(100) };
+                var lutadorCampeonato = new List<LutadorCampeonato>
                 {
                     new LutadorCampeonato { Lutador = entidade, Campeonato = campeonato1 },
                     new LutadorCampeonato { Lutador = entidade, Campeonato = campeonato2 }
                 };
+
+                entidade.LutadorCampeonato = await _lutadorRepository.AtualizaLutadorCampeonato(lutadorCampeonato);
 
                 await _lutadorRepository.Adicionar(entidade);
             }
@@ -68,7 +66,7 @@ namespace ArtesMarciais.Domain.Services
 
                 var campeonato1 = new Campeonato { Nome = "Open Fight", Localidade = "Fortaleza, Brasil", DataRealizacao = DateTime.Now.AddDays(10) };
                 var campeonato2 = new Campeonato { Nome = "UFC 320", Localidade = "Montevideu, Uruguai", DataRealizacao = DateTime.Now.AddDays(100) };
-                var lutadorCampeonato = new List<LutadorCampeonato>
+                var lutadorCampeonato = new List<LutadorCampeonato>()
                 {
                     new LutadorCampeonato { Lutador = entidade, Campeonato = campeonato1 },
                     new LutadorCampeonato { Lutador = entidade, Campeonato = campeonato2 }
